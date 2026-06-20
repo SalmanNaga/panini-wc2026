@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#0a3d20">
+  <title>Panini WC2026</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#111;color:#fff;min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px}
+
+    /* SPLASH */
+    #splash{position:fixed;inset:0;background:linear-gradient(135deg,#0a3d20,#1a6b3c);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
+    #splash .logo{font-size:52px}
+    #splash h1{font-size:22px;font-weight:800;color:#f5c800}
+    #splash p{font-size:13px;color:rgba(255,255,255,0.5)}
+    .spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,0.2);border-top-color:#f5c800;border-radius:50%;animation:spin .8s linear infinite}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* HEADER */
+    #header{background:linear-gradient(135deg,#1a6b3c,#0a3d20);padding:50px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
+    .h-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .brand{font-size:10px;font-weight:800;letter-spacing:3px;color:#f5c800;text-transform:uppercase}
+    .h-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px}
+    .counters{display:flex;gap:8px}
+    .cnt{text-align:center;background:rgba(255,255,255,0.12);border-radius:10px;padding:5px 12px}
+    .cnt-n{font-size:20px;font-weight:800}
+    .cnt-n.g{color:#4ade80}.cnt-n.r{color:#f87171}
+    .cnt-l{font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-top:1px}
+    .prog-track{height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin-bottom:0;overflow:hidden}
+    #prog-fill{height:100%;background:#f5c800;border-radius:2px;width:0%;transition:width .3s}
+
+    /* BOTTOM NAV */
+    #bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#1a1a1a;border-top:1px solid #2a2a2a;display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
+    .nav-btn{flex:1;padding:10px 0 8px;background:none;border:none;color:#555;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;transition:color .15s}
+    .nav-btn .ico{font-size:20px}
+    .nav-btn.active{color:#f5c800}
+
+    /* PAGES */
+    .page{display:none;padding:12px 14px}
+    .page.active{display:block}
+
+    /* SEARCH */
+    .search-wrap{padding:10px 14px 6px;position:relative}
+    .search-inp{width:100%;padding:10px 36px 10px 12px;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:15px;outline:none;font-family:inherit}
+    .search-inp::placeholder{color:#444}
+    .search-inp:focus{border-color:#1a6b3c}
+    .s-clear{position:absolute;right:22px;top:50%;transform:translateY(-50%);background:none;border:none;color:#555;font-size:16px;cursor:pointer;display:none}
+
+    /* GROUP GRID */
+    .group-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+    .group-card{border-radius:12px;padding:12px 10px;cursor:pointer;border:2px solid transparent;text-align:center;transition:all .15s;position:relative}
+    .group-card:active{transform:scale(0.96)}
+    .gc-key{font-size:18px;font-weight:900}
+    .gc-label{font-size:10px;font-weight:600;opacity:.7;margin-top:2px}
+    .gc-prog{font-size:11px;font-weight:800;margin-top:6px}
+    .gc-bar{height:3px;background:rgba(255,255,255,0.2);border-radius:2px;margin-top:5px;overflow:hidden}
+    .gc-bar-fill{height:100%;border-radius:2px;background:rgba(255,255,255,0.8)}
+
+    /* TEAM LIST inside group */
+    .back-btn{display:flex;align-items:center;gap:8px;padding:10px 0 14px;background:none;border:none;color:#aaa;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+    .back-btn:active{color:#fff}
+    .team-section{margin-bottom:18px}
+    .team-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;margin-bottom:6px;cursor:pointer}
+    .team-header:active{opacity:.8}
+    .th-left{display:flex;align-items:center;gap:8px}
+    .th-name{font-size:14px;font-weight:700}
+    .th-count{font-size:12px;opacity:.6}
+    .th-pct{font-size:12px;font-weight:800}
+
+    /* STICKER GRID */
+    .sticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
+    .sc{border-radius:9px;border:1.5px solid;padding:7px 5px 6px;cursor:pointer;text-align:center;transition:all .12s;font-family:inherit;position:relative}
+    .sc:active{transform:scale(0.93)}
+    .sc.missing{background:#1a1a1a;border-color:#252525}
+    .sc.owned{background:#162d1e;border-color:#2d5a3a}
+    .sc-id{font-size:8px;font-weight:800;letter-spacing:.3px;color:rgba(255,255,255,0.35)}
+    .sc.owned .sc-id{color:rgba(74,222,128,0.6)}
+    .sc-num{font-size:13px;font-weight:800;margin-top:2px;color:#444}
+    .sc.owned .sc-num{color:#4ade80}
+    .sc-check{position:absolute;top:3px;right:5px;font-size:8px;color:#4ade80;display:none}
+    .sc.owned .sc-check{display:block}
+
+    /* HAVE / MISSING LIST */
+    .sticker-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;border:1.5px solid;margin-bottom:5px;cursor:pointer;transition:all .12s;font-family:inherit;width:100%;text-align:left}
+    .sticker-row:active{transform:scale(0.98)}
+    .sticker-row.missing{background:#1a1a1a;border-color:#252525}
+    .sticker-row.owned{background:#162d1e;border-color:#2d5a3a}
+    .sr-badge{width:42px;height:42px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;letter-spacing:.2px;text-align:center;line-height:1.2}
+    .sticker-row.missing .sr-badge{background:#222;border:1.5px solid #333;color:#444}
+    .sticker-row.owned .sr-badge{background:#1a6b3c;border:1.5px solid #2d8a4e;color:#4ade80}
+    .sr-info{flex:1}
+    .sr-name{font-size:13px;font-weight:600}
+    .sticker-row.missing .sr-name{color:#777}
+    .sticker-row.owned .sr-name{color:#d1fae5}
+    .sr-sub{font-size:10px;color:#444;margin-top:1px}
+    .sr-action{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+    .sticker-row.missing .sr-action{background:rgba(248,113,113,0.1);color:#f87171}
+    .sticker-row.owned .sr-action{background:rgba(74,222,128,0.12);color:#4ade80}
+
+    /* SECTION HEADERS */
+    .sec-hdr{font-size:11px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:1.5px;padding:14px 0 6px}
+
+    /* SAVE TOAST */
+    #toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1a6b3c;color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
+    #toast.show{opacity:1}
+
+    /* EMPTY */
+    .empty-state{text-align:center;padding:50px 20px;color:#f5c800;font-size:16px;font-weight:700}
+
+    /* SECTION label */
+    .pill{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:800}
+  </style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="logo">⚽</div>
+  <h1>Panini WC 2026</h1>
+  <div class="spinner"></div>
+  <p id="splash-msg">Connecting…</p>
+</div>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="h-top">
+    <div>
+      <div class="brand">⚽ Panini WC 2026</div>
+      <div class="h-sub" id="h-sub">Loading…</div>
+    </div>
+    <div class="counters">
+      <div class="cnt"><div class="cnt-n g" id="cnt-have">0</div><div class="cnt-l">Have</div></div>
+      <div class="cnt"><div class="cnt-n r" id="cnt-need">0</div><div class="cnt-l">Need</div></div>
+    </div>
+  </div>
+  <div class="prog-track"><div id="prog-fill"></div></div>
+</div>
+
+<!-- PAGES -->
+
+<!-- PAGE: GROUPS -->
+<div class="page active" id="page-groups">
+  <div class="sec-hdr">Browse by Group</div>
+  <div class="group-grid" id="group-grid"></div>
+</div>
+
+<!-- PAGE: GROUP DETAIL (teams + sticker grid) -->
+<div class="page" id="page-detail">
+  <button class="back-btn" onclick="showGroups()">‹ All Groups</button>
+  <div id="detail-content"></div>
+</div>
+
+<!-- PAGE: MISSING -->
+<div class="page" id="page-missing">
+  <div class="search-wrap" style="padding:4px 0 10px">
+    <input class="search-inp" id="search-missing" placeholder="🔍 Search missing stickers…" oninput="renderMissing()">
+    <button class="s-clear" id="sc-missing" onclick="clearSearch('missing')">✕</button>
+  </div>
+  <div id="missing-list"></div>
+</div>
+
+<!-- PAGE: HAVE -->
+<div class="page" id="page-have">
+  <div class="search-wrap" style="padding:4px 0 10px">
+    <input class="search-inp" id="search-have" placeholder="🔍 Search collected stickers…" oninput="renderHave()">
+    <button class="s-clear" id="sc-have" onclick="clearSearch('have')">✕</button>
+  </div>
+  <div id="have-list"></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bottom-nav">
+  <button class="nav-btn active" id="nav-groups" onclick="switchPage('groups')"><span class="ico">🗂️</span>Groups</button>
+  <button class="nav-btn" id="nav-missing" onclick="switchPage('missing')"><span class="ico">❌</span>Missing</button>
+  <button class="nav-btn" id="nav-have" onclick="switchPage('have')"><span class="ico">✅</span>Have</button>
+</div>
+
+<div id="toast">✓ Saved</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDiofGyag1LMWfBe22Rm2_gtnZwaIBR9KE",
+  authDomain: "wc2026-25607.firebaseapp.com",
+  projectId: "wc2026-25607",
+  storageBucket: "wc2026-25607.firebasestorage.app",
+  messagingSenderId: "205643984864",
+  appId: "1:205643984864:web:333ea8298c4ff805758585"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const DOC = doc(db, "trackers", "salman");
+
+// ── DATA ─────────────────────────────────────────────────────────────────────
+const GROUPS = [
+  { key:"A", label:"Group A", color:"#2d6a4f", accent:"#95d5b2",
+    teams:[["MEX","Mexico"],["RSA","South Africa"],["KOR","Korea Republic"],["CZE","Czechia"]] },
+  { key:"B", label:"Group B", color:"#c1121f", accent:"#ffd6a5",
+    teams:[["CAN","Canada"],["BIH","Bosnia-Herz."],["SUI","Switzerland"],["QAT","Qatar"]] },
+  { key:"C", label:"Group C", color:"#b5830a", accent:"#fff3b0",
+    teams:[["BRA","Brazil"],["MAR","Morocco"],["SCO","Scotland"],["HAI","Haiti"]] },
+  { key:"D", label:"Group D", color:"#2a52be", accent:"#c8d8ff",
+    teams:[["USA","USA"],["PAR","Paraguay"],["TUR","Türkiye"],["AUS","Australia"]] },
+  { key:"E", label:"Group E", color:"#c45c26", accent:"#fde8d8",
+    teams:[["GER","Germany"],["CUW","Curaçao"],["ECU","Ecuador"],["CIV","Côte d'Ivoire"]] },
+  { key:"F", label:"Group F", color:"#7b2d8b", accent:"#e0aaff",
+    teams:[["NED","Netherlands"],["JPN","Japan"],["SWE","Sweden"],["TUN","Tunisia"]] },
+  { key:"G", label:"Group G", color:"#023e8a", accent:"#90e0ef",
+    teams:[["BEL","Belgium"],["EGY","Egypt"],["IRN","IR Iran"],["NZL","New Zealand"]] },
+  { key:"H", label:"Group H", color:"#8a1070", accent:"#f8c8ee",
+    teams:[["ESP","Spain"],["CPV","Cabo Verde"],["KSA","Saudi Arabia"],["URU","Uruguay"]] },
+  { key:"I", label:"Group I", color:"#3a0ca3", accent:"#c8b6ff",
+    teams:[["FRA","France"],["SEN","Senegal"],["IRQ","Iraq"],["NOR","Norway"]] },
+  { key:"J", label:"Group J", color:"#606c38", accent:"#d4e09b",
+    teams:[["ARG","Argentina"],["ALG","Algeria"],["JOR","Jordan"],["AUT","Austria"]] },
+  { key:"K", label:"Group K", color:"#7d0000", accent:"#ffd5d5",
+    teams:[["POR","Portugal"],["COD","Congo DR"],["UZB","Uzbekistan"],["COL","Colombia"]] },
+  { key:"L", label:"Group L", color:"#1d3557", accent:"#a8dadc",
+    teams:[["ENG","England"],["CRO","Croatia"],["PAN","Panama"],["GHA","Ghana"]] },
+  { key:"FWC", label:"General", color:"#1a6b3c", accent:"#f5c800",
+    teams:[] },
+];
+
+// Build ALL stickers
+const ALL = [];
+const BY_GROUP = {};
+const BY_TEAM = {};
+
+// FWC general
+const fwcGroup = GROUPS.find(g=>g.key==="FWC");
+const fwcStickers = [];
+["Trophy","Mascot","Official Marks","Official Slogan","Match Ball"].forEach((name,i)=>{
+  const s = {id:`FWC${i+1}`,label:`FWC${i+1}`,name,group:"FWC",groupLabel:"General",team:"FWC",teamName:"General"};
+  ALL.push(s); fwcStickers.push(s);
+});
+for(let i=11;i<=19;i++){
+  const s = {id:`FWC${i}`,label:`FWC${i}`,name:`WC History ${i-10}`,group:"FWC",groupLabel:"General",team:"FWC",teamName:"General"};
+  ALL.push(s); fwcStickers.push(s);
+}
+BY_TEAM["FWC"] = fwcStickers;
+BY_GROUP["FWC"] = fwcStickers;
+
+GROUPS.filter(g=>g.key!=="FWC").forEach(g=>{
+  const gStickers = [];
+  g.teams.forEach(([code,name])=>{
+    const ts = [];
+    const badge = {id:`${code}0`,label:`${code}0`,name:`${name} — Badge`,group:g.key,groupLabel:g.label,team:code,teamName:name,number:0};
+    ts.push(badge); gStickers.push(badge); ALL.push(badge);
+    for(let n=1;n<=20;n++){
+      const s = {id:`${code}${n}`,label:`${code}${n}`,name:`${name} #${n}`,group:g.key,groupLabel:g.label,team:code,teamName:name,number:n};
+      ts.push(s); gStickers.push(s); ALL.push(s);
+    }
+    BY_TEAM[code] = ts;
+  });
+  BY_GROUP[g.key] = gStickers;
+});
+
+// ── STATE ────────────────────────────────────────────────────────────────────
+let owned = new Set();
+let currentPage = "groups";
+let saveTimer = null;
+
+// ── FIREBASE ─────────────────────────────────────────────────────────────────
+async function load(){
+  try{
+    setSplash("Loading your collection…");
+    const snap = await getDoc(DOC);
+    if(snap.exists()) owned = new Set(snap.data().owned||[]);
+    hideSplash();
+    updateHeader();
+    renderGroups();
+  }catch(e){
+    try{ owned = new Set(JSON.parse(localStorage.getItem("panini26")||"[]")); }catch{}
+    setSplash("⚠️ Offline — using local data");
+    setTimeout(hideSplash,1500);
+    updateHeader();
+    renderGroups();
+  }
+}
+
+function scheduleSave(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async()=>{
+    try{ localStorage.setItem("panini26",JSON.stringify([...owned])); }catch{}
+    try{
+      await setDoc(DOC,{owned:[...owned],updatedAt:new Date().toISOString()});
+      toast("✓ Saved to cloud");
+    }catch{ toast("✓ Saved locally"); }
+  },600);
+}
+
+// ── TOGGLE ───────────────────────────────────────────────────────────────────
+window.toggle = function(id){
+  owned.has(id)?owned.delete(id):owned.add(id);
+  updateHeader();
+  scheduleSave();
+  // Refresh current page
+  if(currentPage==="groups") renderGroups();
+  else if(currentPage==="detail") renderDetail(window._currentGroup);
+  else if(currentPage==="missing"){ renderMissing(); }
+  else if(currentPage==="have"){ renderHave(); }
+};
+
+// ── HEADER ───────────────────────────────────────────────────────────────────
+function updateHeader(){
+  const total=ALL.length, have=owned.size, need=total-have, pct=Math.round(have/total*100);
+  document.getElementById("cnt-have").textContent=have;
+  document.getElementById("cnt-need").textContent=need;
+  document.getElementById("h-sub").textContent=`${have}/${total} collected · ${pct}%`;
+  document.getElementById("prog-fill").style.width=pct+"%";
+}
+
+// ── PAGES ────────────────────────────────────────────────────────────────────
+window.switchPage = function(page){
+  currentPage=page;
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-"+page).classList.add("active");
+  document.getElementById("nav-"+page).classList.add("active");
+  if(page==="missing") renderMissing();
+  else if(page==="have") renderHave();
+  else if(page==="groups") renderGroups();
+};
+
+window.showGroups = function(){
+  document.getElementById("page-detail").classList.remove("active");
+  document.getElementById("page-groups").classList.add("active");
+  currentPage="groups";
+};
+
+// ── GROUPS PAGE ───────────────────────────────────────────────────────────────
+function renderGroups(){
+  const grid = document.getElementById("group-grid");
+  grid.innerHTML = GROUPS.map(g=>{
+    const stickers = BY_GROUP[g.key]||[];
+    const have = stickers.filter(s=>owned.has(s.id)).length;
+    const total = stickers.length;
+    const pct = total?Math.round(have/total*100):0;
+    return `<div class="group-card" style="background:${g.color}22;border-color:${g.color}55" onclick="showDetail('${g.key}')">
+      <div class="gc-key" style="color:${g.accent}">${g.key}</div>
+      <div class="gc-label" style="color:rgba(255,255,255,0.6)">${g.label}</div>
+      <div class="gc-prog" style="color:${g.accent}">${have}/${total}</div>
+      <div class="gc-bar"><div class="gc-bar-fill" style="width:${pct}%;background:${g.accent}"></div></div>
+    </div>`;
+  }).join("");
+}
+
+// ── GROUP DETAIL ──────────────────────────────────────────────────────────────
+window._currentGroup = null;
+window.showDetail = function(groupKey){
+  window._currentGroup = groupKey;
+  currentPage="detail";
+  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("page-detail").classList.add("active");
+  document.getElementById("nav-groups").classList.add("active");
+  renderDetail(groupKey);
+};
+
+function renderDetail(groupKey){
+  const g = GROUPS.find(x=>x.key===groupKey);
+  const content = document.getElementById("detail-content");
+
+  // Header
+  let html = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+    <span class="pill" style="background:${g.color};color:${g.accent};font-size:14px;padding:4px 12px">${g.key}</span>
+    <span style="font-size:16px;font-weight:800">${g.label}</span>
+  </div>`;
+
+  // For FWC show flat list
+  if(groupKey==="FWC"){
+    const stickers = BY_GROUP["FWC"]||[];
+    html += `<div class="sec-hdr">General Stickers</div><div class="sticker-grid">`;
+    html += stickers.map(s=>stickerCard(s)).join("");
+    html += `</div>`;
+  } else {
+    // Each team
+    g.teams.forEach(([code,name])=>{
+      const ts = BY_TEAM[code]||[];
+      const have = ts.filter(s=>owned.has(s.id)).length;
+      html += `<div class="team-section">
+        <div class="team-header" style="background:${g.color}22">
+          <div class="th-left">
+            <span style="font-size:15px;font-weight:800;color:${g.accent}">${code}</span>
+            <span class="th-name">${name}</span>
+          </div>
+          <span class="th-pct" style="color:${g.accent}">${have}/${ts.length}</span>
+        </div>
+        <div class="sticker-grid">${ts.map(s=>stickerCard(s)).join("")}</div>
+      </div>`;
+    });
+  }
+
+  content.innerHTML = html;
+}
+
+function stickerCard(s){
+  const isOwned = owned.has(s.id);
+  const cls = isOwned?"owned":"missing";
+  const num = s.number===0?"🏷️":(s.number!=null?`#${s.number}`:s.label.replace(/^[A-Z]+/,""));
+  return `<button class="sc ${cls}" onclick="toggle('${s.id}')">
+    <div class="sc-check">✓</div>
+    <div class="sc-id">${s.label}</div>
+    <div class="sc-num">${num}</div>
+  </button>`;
+}
+
+// ── MISSING PAGE ──────────────────────────────────────────────────────────────
+window.renderMissing = function(){
+  const q = document.getElementById("search-missing").value.toLowerCase().trim();
+  document.getElementById("sc-missing").style.display = q?"block":"none";
+  const items = ALL.filter(s=>!owned.has(s.id) && (!q||s.label.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)||s.teamName?.toLowerCase().includes(q)));
+  const el = document.getElementById("missing-list");
+  if(!items.length){
+    el.innerHTML=`<div class="empty-state">🏆 You have everything${q?" matching that search":""}!</div>`;
+    return;
+  }
+  // Group by group
+  const byGroup = {};
+  items.forEach(s=>{ (byGroup[s.group]=byGroup[s.group]||[]).push(s); });
+  let html = `<div style="font-size:11px;color:#444;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">${items.length} sticker${items.length!==1?"s":""} missing</div>`;
+  GROUPS.forEach(g=>{
+    const gs = byGroup[g.key];
+    if(!gs) return;
+    html+=`<div class="sec-hdr" style="color:${g.accent||'#aaa'}">${g.label} — ${gs.length} missing</div>`;
+    html+=gs.map(s=>stickerRow(s,g)).join("");
+  });
+  el.innerHTML=html;
+};
+
+// ── HAVE PAGE ─────────────────────────────────────────────────────────────────
+window.renderHave = function(){
+  const q = document.getElementById("search-have").value.toLowerCase().trim();
+  document.getElementById("sc-have").style.display = q?"block":"none";
+  const items = ALL.filter(s=>owned.has(s.id) && (!q||s.label.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)||s.teamName?.toLowerCase().includes(q)));
+  const el = document.getElementById("have-list");
+  if(!items.length){
+    el.innerHTML=`<div class="empty-state">Nothing collected yet!<br><br>Go to Groups and tap stickers.</div>`;
+    return;
+  }
+  const byGroup = {};
+  items.forEach(s=>{ (byGroup[s.group]=byGroup[s.group]||[]).push(s); });
+  let html = `<div style="font-size:11px;color:#444;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">${items.length} sticker${items.length!==1?"s":""} collected</div>`;
+  GROUPS.forEach(g=>{
+    const gs = byGroup[g.key];
+    if(!gs) return;
+    html+=`<div class="sec-hdr" style="color:${g.accent||'#aaa'}">${g.label} — ${gs.length} collected</div>`;
+    html+=gs.map(s=>stickerRow(s,g,true)).join("");
+  });
+  el.innerHTML=html;
+};
+
+function stickerRow(s, g, isOwned=false){
+  const cls = isOwned?"owned":"missing";
+  const icon = isOwned?"✓":"+";
+  return `<button class="sticker-row ${cls}" onclick="toggle('${s.id}')">
+    <div class="sr-badge">${s.label}</div>
+    <div class="sr-info">
+      <div class="sr-name">${s.name}</div>
+      <div class="sr-sub">${s.groupLabel}</div>
+    </div>
+    <div class="sr-action">${icon}</div>
+  </button>`;
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+window.clearSearch = function(which){
+  document.getElementById("search-"+which).value="";
+  document.getElementById("sc-"+which).style.display="none";
+  if(which==="missing") renderMissing();
+  else renderHave();
+};
+
+// ── UI HELPERS ────────────────────────────────────────────────────────────────
+function hideSplash(){
+  const s=document.getElementById("splash");
+  s.style.transition="opacity .4s";s.style.opacity="0";
+  setTimeout(()=>s.remove(),400);
+}
+function setSplash(msg){ document.getElementById("splash-msg").textContent=msg; }
+function toast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg;el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),2000);
+}
+
+load();
+</script>
+</body>
+</html>
