@@ -248,8 +248,6 @@ GROUPS.filter(g=>g.key!=="FWC").forEach(g=>{
   const gStickers = [];
   g.teams.forEach(([code,name])=>{
     const ts = [];
-    const badge = {id:`${code}0`,label:`${code}0`,name:`${name} — Badge`,group:g.key,groupLabel:g.label,team:code,teamName:name,number:0};
-    ts.push(badge); gStickers.push(badge); ALL.push(badge);
     for(let n=1;n<=20;n++){
       const s = {id:`${code}${n}`,label:`${code}${n}`,name:`${name} #${n}`,group:g.key,groupLabel:g.label,team:code,teamName:name,number:n};
       ts.push(s); gStickers.push(s); ALL.push(s);
@@ -401,7 +399,7 @@ function renderDetail(groupKey){
 function stickerCard(s){
   const isOwned = owned.has(s.id);
   const cls = isOwned?"owned":"missing";
-  const num = s.number===0?"🏷️":(s.number!=null?`#${s.number}`:s.label.replace(/^[A-Z]+/,""));
+  const num = s.number!=null?`#${s.number}`:s.label.replace(/^[A-Z]+/,"");
   return `<button class="sc ${cls}" onclick="toggle('${s.id}')">
     <div class="sc-check">✓</div>
     <div class="sc-id">${s.label}</div>
