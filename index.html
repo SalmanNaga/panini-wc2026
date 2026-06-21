@@ -9,175 +9,269 @@
   <title>Panini WC2026</title>
   <style>
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-    body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;background:#111;color:#fff;min-height:100vh;max-width:480px;margin:0 auto;padding-bottom:80px}
+    :root{
+      --green:#1a6b3c;--green2:#0a3d20;--gold:#f5c800;
+      --bg:#0f0f0f;--card:#1a1a1a;--card2:#222;
+      --border:#2a2a2a;--text:#fff;--sub:#888;--dim:#444;
+    }
+    html,body{height:100%;background:var(--bg)}
+    body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display',sans-serif;color:var(--text);max-width:480px;margin:0 auto;padding-bottom:80px;min-height:100vh}
 
-    /* SPLASH */
-    #splash{position:fixed;inset:0;background:linear-gradient(135deg,#0a3d20,#1a6b3c);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:14px}
-    #splash .logo{font-size:52px}
-    #splash h1{font-size:22px;font-weight:800;color:#f5c800}
-    #splash p{font-size:13px;color:rgba(255,255,255,0.5)}
-    .spinner{width:30px;height:30px;border:3px solid rgba(255,255,255,0.2);border-top-color:#f5c800;border-radius:50%;animation:spin .8s linear infinite}
+    /* ── SPLASH ── */
+    #splash{position:fixed;inset:0;background:linear-gradient(160deg,#0a3d20 0%,#1a6b3c 60%,#0a3d20 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:999;gap:16px;transition:opacity .5s}
+    .splash-ball{font-size:64px;animation:bounce 1.2s ease-in-out infinite}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+    .splash-title{font-size:24px;font-weight:900;color:var(--gold);letter-spacing:-0.5px}
+    .splash-sub{font-size:13px;color:rgba(255,255,255,0.5)}
+    .spinner{width:28px;height:28px;border:3px solid rgba(255,255,255,0.15);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
     @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* HEADER */
-    #header{background:linear-gradient(135deg,#1a6b3c,#0a3d20);padding:50px 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
-    .h-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-    .brand{font-size:10px;font-weight:800;letter-spacing:3px;color:#f5c800;text-transform:uppercase}
-    .h-sub{font-size:12px;color:rgba(255,255,255,0.5);margin-top:2px}
-    .counters{display:flex;gap:8px}
-    .cnt{text-align:center;background:rgba(255,255,255,0.12);border-radius:10px;padding:5px 12px}
-    .cnt-n{font-size:20px;font-weight:800}
-    .cnt-n.g{color:#4ade80}.cnt-n.r{color:#f87171}
-    .cnt-l{font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-top:1px}
-    .prog-track{height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin-bottom:0;overflow:hidden}
-    #prog-fill{height:100%;background:#f5c800;border-radius:2px;width:0%;transition:width .3s}
+    /* ── HEADER ── */
+    #header{background:linear-gradient(160deg,#0a3d20,#1a6b3c);padding:env(safe-area-inset-top,44px) 16px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 30px rgba(0,0,0,0.5)}
+    .h-inner{padding-top:10px}
+    .h-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+    .h-brand{font-size:11px;font-weight:800;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+    .h-title{font-size:20px;font-weight:900;letter-spacing:-0.5px;margin-top:2px}
+    .h-counters{display:flex;gap:8px;align-items:center}
+    .h-cnt{text-align:center;background:rgba(255,255,255,0.1);border-radius:12px;padding:7px 14px;backdrop-filter:blur(10px)}
+    .h-cnt-n{font-size:22px;font-weight:900;line-height:1}
+    .h-cnt-n.g{color:#4ade80}.h-cnt-n.r{color:#f87171}.h-cnt-n.y{color:var(--gold)}
+    .h-cnt-l{font-size:9px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:1px;margin-top:3px}
 
-    /* BOTTOM NAV */
-    #bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#1a1a1a;border-top:1px solid #2a2a2a;display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom)}
-    .nav-btn{flex:1;padding:10px 0 8px;background:none;border:none;color:#555;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;transition:color .15s}
-    .nav-btn .ico{font-size:20px}
-    .nav-btn.active{color:#f5c800}
+    /* Progress ring + bar */
+    .h-prog-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .h-prog-label{font-size:12px;color:rgba(255,255,255,0.5);white-space:nowrap}
+    .prog-track{flex:1;height:6px;background:rgba(255,255,255,0.12);border-radius:3px;overflow:hidden}
+    #prog-fill{height:100%;background:linear-gradient(90deg,var(--gold),#ff9500);border-radius:3px;width:0%;transition:width .4s ease}
+    .h-pct{font-size:13px;font-weight:800;color:var(--gold);min-width:36px;text-align:right}
 
-    /* PAGES */
-    .page{display:none;padding:12px 14px}
-    .page.active{display:block}
+    /* ── BOTTOM NAV ── */
+    #bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#161616;border-top:1px solid #2a2a2a;display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom,0px);box-shadow:0 -4px 20px rgba(0,0,0,0.4)}
+    .nb{flex:1;padding:10px 0 8px;background:none;border:none;color:#555;font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-family:inherit;transition:color .15s;position:relative}
+    .nb .ni{font-size:22px;line-height:1}
+    .nb.active{color:var(--gold)}
+    .nb.active::after{content:'';position:absolute;top:0;left:25%;width:50%;height:2px;background:var(--gold);border-radius:0 0 2px 2px}
 
-    /* SEARCH */
-    .search-wrap{padding:10px 14px 6px;position:relative}
-    .search-inp{width:100%;padding:10px 36px 10px 12px;background:#1e1e1e;border:1.5px solid #2a2a2a;border-radius:10px;color:#fff;font-size:15px;outline:none;font-family:inherit}
-    .search-inp::placeholder{color:#444}
-    .search-inp:focus{border-color:#1a6b3c}
-    .s-clear{position:absolute;right:22px;top:50%;transform:translateY(-50%);background:none;border:none;color:#555;font-size:16px;cursor:pointer;display:none}
+    /* ── PAGES ── */
+    .page{display:none}.page.active{display:block}
 
-    /* GROUP GRID */
-    .group-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-    .group-card{border-radius:12px;padding:12px 10px;cursor:pointer;border:2px solid transparent;text-align:center;transition:all .15s;position:relative}
-    .group-card:active{transform:scale(0.96)}
-    .gc-key{font-size:18px;font-weight:900}
-    .gc-label{font-size:10px;font-weight:600;opacity:.7;margin-top:2px}
-    .gc-prog{font-size:11px;font-weight:800;margin-top:6px}
-    .gc-bar{height:3px;background:rgba(255,255,255,0.2);border-radius:2px;margin-top:5px;overflow:hidden}
-    .gc-bar-fill{height:100%;border-radius:2px;background:rgba(255,255,255,0.8)}
+    /* ── GROUPS PAGE ── */
+    #page-groups{padding:16px 14px}
+    .pg-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .pg-title{font-size:18px;font-weight:800}
+    .pg-sub{font-size:12px;color:var(--sub);margin-top:2px}
+    .group-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .gc{border-radius:16px;padding:16px 14px;cursor:pointer;border:1.5px solid;transition:all .15s;position:relative;overflow:hidden}
+    .gc:active{transform:scale(0.97)}
+    .gc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+    .gc-key{font-size:22px;font-weight:900}
+    .gc-badge{font-size:10px;font-weight:800;padding:3px 8px;border-radius:20px;background:rgba(255,255,255,0.15)}
+    .gc-name{font-size:12px;font-weight:600;opacity:.7;margin-bottom:10px}
+    .gc-teams{font-size:10px;opacity:.5;margin-bottom:12px}
+    .gc-foot{display:flex;justify-content:space-between;align-items:center}
+    .gc-count{font-size:14px;font-weight:800}
+    .gc-pct{font-size:11px;font-weight:700;opacity:.7}
+    .gc-bar{height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin-top:8px;overflow:hidden}
+    .gc-bar-fill{height:100%;border-radius:2px;transition:width .4s}
+    .gc-done{position:absolute;top:10px;right:10px;font-size:16px}
 
-    /* TEAM LIST inside group */
-    .back-btn{display:flex;align-items:center;gap:8px;padding:10px 0 14px;background:none;border:none;color:#aaa;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
-    .back-btn:active{color:#fff}
-    .team-section{margin-bottom:18px}
-    .team-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:10px;margin-bottom:6px;cursor:pointer}
-    .team-header:active{opacity:.8}
+    /* ── DETAIL PAGE ── */
+    #page-detail{padding:0 14px 16px}
+    .back-row{display:flex;align-items:center;gap:6px;padding:14px 0 10px;cursor:pointer;color:var(--sub);font-size:14px;font-weight:600;background:none;border:none;font-family:inherit;width:100%;text-align:left}
+    .back-row:active{color:var(--text)}
+    .detail-hdr{border-radius:16px;padding:16px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between}
+    .dh-left .dh-key{font-size:28px;font-weight:900}
+    .dh-left .dh-name{font-size:14px;font-weight:600;opacity:.7;margin-top:2px}
+    .dh-right{text-align:right}
+    .dh-stat{font-size:24px;font-weight:900}
+    .dh-stat-l{font-size:11px;opacity:.6;margin-top:2px}
+    .team-block{margin-bottom:20px}
+    .team-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;margin-bottom:8px}
     .th-left{display:flex;align-items:center;gap:8px}
+    .th-code{font-size:13px;font-weight:900;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,0.15)}
     .th-name{font-size:14px;font-weight:700}
-    .th-count{font-size:12px;opacity:.6}
-    .th-pct{font-size:12px;font-weight:800}
+    .th-right{display:flex;align-items:center;gap:8px}
+    .th-count{font-size:13px;font-weight:700;opacity:.7}
+    .sticker-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+    .sc{border-radius:10px;border:1.5px solid;padding:8px 4px 7px;cursor:pointer;text-align:center;transition:all .12s;font-family:inherit;position:relative;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+    .sc:active{transform:scale(0.9)}
+    .sc.miss{background:#1a1a1a;border-color:#2a2a2a}
+    .sc.have{background:#0d2d1a;border-color:#1a4d2a}
+    .sc-num{font-size:14px;font-weight:900;line-height:1}
+    .sc.miss .sc-num{color:#444}
+    .sc.have .sc-num{color:#4ade80}
+    .sc-lbl{font-size:7px;font-weight:700;letter-spacing:.2px;margin-top:2px;opacity:.4}
+    .sc.have .sc-lbl{opacity:.6;color:#4ade80}
+    .sc-ck{position:absolute;top:2px;right:4px;font-size:7px;color:#4ade80;display:none}
+    .sc.have .sc-ck{display:block}
 
-    /* STICKER GRID */
-    .sticker-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}
-    .sc{border-radius:9px;border:1.5px solid;padding:7px 5px 6px;cursor:pointer;text-align:center;transition:all .12s;font-family:inherit;position:relative}
-    .sc:active{transform:scale(0.93)}
-    .sc.missing{background:#1a1a1a;border-color:#252525}
-    .sc.owned{background:#162d1e;border-color:#2d5a3a}
-    .sc-id{font-size:8px;font-weight:800;letter-spacing:.3px;color:rgba(255,255,255,0.35)}
-    .sc.owned .sc-id{color:rgba(74,222,128,0.6)}
-    .sc-num{font-size:13px;font-weight:800;margin-top:2px;color:#444}
-    .sc.owned .sc-num{color:#4ade80}
-    .sc-check{position:absolute;top:3px;right:5px;font-size:8px;color:#4ade80;display:none}
-    .sc.owned .sc-check{display:block}
+    /* ── MISSING / HAVE PAGES ── */
+    #page-missing,#page-have{padding:16px 14px}
+    .list-toolbar{display:flex;gap:8px;margin-bottom:14px;align-items:center}
+    .search-box{flex:1;position:relative}
+    .search-box input{width:100%;padding:10px 36px 10px 14px;background:var(--card);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-size:14px;outline:none;font-family:inherit}
+    .search-box input::placeholder{color:var(--dim)}
+    .search-box input:focus{border-color:var(--green)}
+    .s-clr{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--dim);font-size:14px;cursor:pointer;display:none}
+    .export-btn{flex-shrink:0;padding:10px 14px;background:var(--green);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:5px;white-space:nowrap}
+    .export-btn:active{background:#145c33}
 
-    /* HAVE / MISSING LIST */
-    .sticker-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;border:1.5px solid;margin-bottom:5px;cursor:pointer;transition:all .12s;font-family:inherit;width:100%;text-align:left}
+    .list-summary{font-size:11px;color:var(--dim);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+    .group-section{margin-bottom:20px}
+    .gs-hdr{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+    .gs-pill{font-size:10px;font-weight:900;padding:3px 8px;border-radius:20px}
+    .gs-name{font-size:13px;font-weight:700;flex:1}
+    .gs-cnt{font-size:12px;font-weight:700;color:var(--sub)}
+    .sticker-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;border:1.5px solid;margin-bottom:5px;cursor:pointer;transition:all .12s;font-family:inherit;width:100%;text-align:left;background:var(--card);border-color:var(--border)}
     .sticker-row:active{transform:scale(0.98)}
-    .sticker-row.missing{background:#1a1a1a;border-color:#252525}
-    .sticker-row.owned{background:#162d1e;border-color:#2d5a3a}
-    .sr-badge{width:42px;height:42px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:800;letter-spacing:.2px;text-align:center;line-height:1.2}
-    .sticker-row.missing .sr-badge{background:#222;border:1.5px solid #333;color:#444}
-    .sticker-row.owned .sr-badge{background:#1a6b3c;border:1.5px solid #2d8a4e;color:#4ade80}
-    .sr-info{flex:1}
-    .sr-name{font-size:13px;font-weight:600}
-    .sticker-row.missing .sr-name{color:#777}
-    .sticker-row.owned .sr-name{color:#d1fae5}
-    .sr-sub{font-size:10px;color:#444;margin-top:1px}
-    .sr-action{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-    .sticker-row.missing .sr-action{background:rgba(248,113,113,0.1);color:#f87171}
-    .sticker-row.owned .sr-action{background:rgba(74,222,128,0.12);color:#4ade80}
+    .sticker-row.have{background:#0d2d1a;border-color:#1a4d2a}
+    .sr-id{width:44px;height:44px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;text-align:center;line-height:1.2;background:#222;border:1.5px solid #333;color:#555}
+    .sticker-row.have .sr-id{background:#1a6b3c;border-color:#2d8a4e;color:#4ade80}
+    .sr-body{flex:1;min-width:0}
+    .sr-name{font-size:13px;font-weight:600;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .sticker-row.have .sr-name{color:#d1fae5}
+    .sr-grp{font-size:10px;color:var(--dim);margin-top:1px}
+    .sr-btn{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;font-weight:700}
+    .sticker-row:not(.have) .sr-btn{background:rgba(248,113,113,0.12);color:#f87171}
+    .sticker-row.have .sr-btn{background:rgba(74,222,128,0.12);color:#4ade80}
 
-    /* SECTION HEADERS */
-    .sec-hdr{font-size:11px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:1.5px;padding:14px 0 6px}
+    /* ── EXPORT MODAL ── */
+    #modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:500;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(4px)}
+    #modal-overlay.open{display:flex}
+    #modal{background:#1a1a1a;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:480px;max-height:80vh;display:flex;flex-direction:column;gap:14px}
+    .modal-drag{width:36px;height:4px;background:#333;border-radius:2px;margin:0 auto -4px}
+    .modal-title{font-size:18px;font-weight:800}
+    .modal-sub{font-size:13px;color:var(--sub)}
+    .modal-text{background:#111;border-radius:12px;padding:14px;font-size:11px;color:#aaa;font-family:'SF Mono',monospace;max-height:40vh;overflow-y:auto;white-space:pre-wrap;line-height:1.6;border:1px solid var(--border)}
+    .modal-actions{display:flex;gap:8px}
+    .modal-btn{flex:1;padding:13px;border-radius:12px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+    .modal-btn.primary{background:var(--green);color:#fff}
+    .modal-btn.secondary{background:var(--card2);color:var(--sub)}
+    .modal-btn:active{opacity:.8}
 
-    /* SAVE TOAST */
-    #toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:#1a6b3c;color:#fff;padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:300;white-space:nowrap}
+    /* ── TOAST ── */
+    #toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid #333;color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:400;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.4)}
     #toast.show{opacity:1}
+    .toast-icon{margin-right:6px}
 
-    /* EMPTY */
-    .empty-state{text-align:center;padding:50px 20px;color:#f5c800;font-size:16px;font-weight:700}
-
-    /* SECTION label */
-    .pill{display:inline-block;border-radius:6px;padding:2px 8px;font-size:11px;font-weight:800}
+    /* ── EMPTY ── */
+    .empty{text-align:center;padding:60px 20px}
+    .empty-icon{font-size:48px;margin-bottom:12px}
+    .empty-title{font-size:18px;font-weight:800;color:var(--gold);margin-bottom:6px}
+    .empty-sub{font-size:13px;color:var(--sub)}
   </style>
 </head>
 <body>
 
+<!-- SPLASH -->
 <div id="splash">
-  <div class="logo">⚽</div>
-  <h1>Panini WC 2026</h1>
+  <div class="splash-ball">⚽</div>
+  <div class="splash-title">Panini WC 2026</div>
   <div class="spinner"></div>
-  <p id="splash-msg">Connecting…</p>
+  <div class="splash-sub" id="splash-msg">Connecting to Firebase…</div>
 </div>
 
 <!-- HEADER -->
 <div id="header">
-  <div class="h-top">
-    <div>
-      <div class="brand">⚽ Panini WC 2026</div>
-      <div class="h-sub" id="h-sub">Loading…</div>
+  <div class="h-inner">
+    <div class="h-top">
+      <div>
+        <div class="h-brand">⚽ Panini WC 2026</div>
+        <div class="h-title">My Collection</div>
+      </div>
+      <div class="h-counters">
+        <div class="h-cnt"><div class="h-cnt-n g" id="cnt-have">0</div><div class="h-cnt-l">Have</div></div>
+        <div class="h-cnt"><div class="h-cnt-n r" id="cnt-need">0</div><div class="h-cnt-l">Need</div></div>
+      </div>
     </div>
-    <div class="counters">
-      <div class="cnt"><div class="cnt-n g" id="cnt-have">0</div><div class="cnt-l">Have</div></div>
-      <div class="cnt"><div class="cnt-n r" id="cnt-need">0</div><div class="cnt-l">Need</div></div>
+    <div class="h-prog-wrap">
+      <div class="h-prog-label">Progress</div>
+      <div class="prog-track"><div id="prog-fill"></div></div>
+      <div class="h-pct" id="h-pct">0%</div>
     </div>
   </div>
-  <div class="prog-track"><div id="prog-fill"></div></div>
 </div>
-
-<!-- PAGES -->
 
 <!-- PAGE: GROUPS -->
 <div class="page active" id="page-groups">
-  <div class="sec-hdr">Browse by Group</div>
-  <div class="group-grid" id="group-grid"></div>
+  <div style="padding:16px 14px">
+    <div class="pg-header">
+      <div>
+        <div class="pg-title">Groups</div>
+        <div class="pg-sub">Tap a group to view stickers</div>
+      </div>
+    </div>
+    <div class="group-grid" id="group-grid"></div>
+  </div>
 </div>
 
-<!-- PAGE: GROUP DETAIL (teams + sticker grid) -->
+<!-- PAGE: GROUP DETAIL -->
 <div class="page" id="page-detail">
-  <button class="back-btn" onclick="showGroups()">‹ All Groups</button>
+  <button class="back-row" onclick="showGroups()">‹ Back to Groups</button>
   <div id="detail-content"></div>
 </div>
 
 <!-- PAGE: MISSING -->
 <div class="page" id="page-missing">
-  <div class="search-wrap" style="padding:4px 0 10px">
-    <input class="search-inp" id="search-missing" placeholder="🔍 Search missing stickers…" oninput="renderMissing()">
-    <button class="s-clear" id="sc-missing" onclick="clearSearch('missing')">✕</button>
+  <div style="padding:16px 14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div>
+        <div class="pg-title">Missing</div>
+        <div class="pg-sub">Tap a sticker when you get it</div>
+      </div>
+      <button class="export-btn" onclick="openExport()">📋 Export</button>
+    </div>
+    <div class="list-toolbar">
+      <div class="search-box">
+        <input id="search-m" placeholder="🔍  Search stickers…" oninput="renderMissing()">
+        <button class="s-clr" id="clr-m" onclick="clearSrch('m')">✕</button>
+      </div>
+    </div>
+    <div class="list-summary" id="sum-m"></div>
+    <div id="list-missing"></div>
   </div>
-  <div id="missing-list"></div>
 </div>
 
 <!-- PAGE: HAVE -->
 <div class="page" id="page-have">
-  <div class="search-wrap" style="padding:4px 0 10px">
-    <input class="search-inp" id="search-have" placeholder="🔍 Search collected stickers…" oninput="renderHave()">
-    <button class="s-clear" id="sc-have" onclick="clearSearch('have')">✕</button>
+  <div style="padding:16px 14px">
+    <div style="margin-bottom:14px">
+      <div class="pg-title">Have ✅</div>
+      <div class="pg-sub">Tap to remove if added by mistake</div>
+    </div>
+    <div class="list-toolbar">
+      <div class="search-box">
+        <input id="search-h" placeholder="🔍  Search collected…" oninput="renderHave()">
+        <button class="s-clr" id="clr-h" onclick="clearSrch('h')">✕</button>
+      </div>
+    </div>
+    <div class="list-summary" id="sum-h"></div>
+    <div id="list-have"></div>
   </div>
-  <div id="have-list"></div>
 </div>
 
 <!-- BOTTOM NAV -->
-<div id="bottom-nav">
-  <button class="nav-btn active" id="nav-groups" onclick="switchPage('groups')"><span class="ico">🗂️</span>Groups</button>
-  <button class="nav-btn" id="nav-missing" onclick="switchPage('missing')"><span class="ico">❌</span>Missing</button>
-  <button class="nav-btn" id="nav-have" onclick="switchPage('have')"><span class="ico">✅</span>Have</button>
+<div id="bnav">
+  <button class="nb active" id="nav-groups" onclick="switchPage('groups')"><span class="ni">🗂️</span>Groups</button>
+  <button class="nb" id="nav-missing" onclick="switchPage('missing')"><span class="ni">❌</span>Missing</button>
+  <button class="nb" id="nav-have" onclick="switchPage('have')"><span class="ni">✅</span>Have</button>
 </div>
 
-<div id="toast">✓ Saved</div>
+<!-- EXPORT MODAL -->
+<div id="modal-overlay" onclick="e=>e.target===this&&closeExport()">
+  <div id="modal">
+    <div class="modal-drag"></div>
+    <div class="modal-title">📋 Missing Stickers List</div>
+    <div class="modal-sub" id="modal-sub"></div>
+    <div class="modal-text" id="modal-text"></div>
+    <div class="modal-actions">
+      <button class="modal-btn secondary" onclick="closeExport()">Close</button>
+      <button class="modal-btn primary" onclick="copyList()">📋 Copy to Clipboard</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -197,126 +291,102 @@ const DOC = doc(db, "trackers", "salman");
 
 // ── DATA ─────────────────────────────────────────────────────────────────────
 const GROUPS = [
-  { key:"A", label:"Group A", color:"#2d6a4f", accent:"#95d5b2",
-    teams:[["MEX","Mexico"],["RSA","South Africa"],["KOR","Korea Republic"],["CZE","Czechia"]] },
-  { key:"B", label:"Group B", color:"#c1121f", accent:"#ffd6a5",
-    teams:[["CAN","Canada"],["BIH","Bosnia-Herz."],["SUI","Switzerland"],["QAT","Qatar"]] },
-  { key:"C", label:"Group C", color:"#b5830a", accent:"#fff3b0",
-    teams:[["BRA","Brazil"],["MAR","Morocco"],["SCO","Scotland"],["HAI","Haiti"]] },
-  { key:"D", label:"Group D", color:"#2a52be", accent:"#c8d8ff",
-    teams:[["USA","USA"],["PAR","Paraguay"],["TUR","Türkiye"],["AUS","Australia"]] },
-  { key:"E", label:"Group E", color:"#c45c26", accent:"#fde8d8",
-    teams:[["GER","Germany"],["CUW","Curaçao"],["ECU","Ecuador"],["CIV","Côte d'Ivoire"]] },
-  { key:"F", label:"Group F", color:"#7b2d8b", accent:"#e0aaff",
-    teams:[["NED","Netherlands"],["JPN","Japan"],["SWE","Sweden"],["TUN","Tunisia"]] },
-  { key:"G", label:"Group G", color:"#023e8a", accent:"#90e0ef",
-    teams:[["BEL","Belgium"],["EGY","Egypt"],["IRN","IR Iran"],["NZL","New Zealand"]] },
-  { key:"H", label:"Group H", color:"#8a1070", accent:"#f8c8ee",
-    teams:[["ESP","Spain"],["CPV","Cabo Verde"],["KSA","Saudi Arabia"],["URU","Uruguay"]] },
-  { key:"I", label:"Group I", color:"#3a0ca3", accent:"#c8b6ff",
-    teams:[["FRA","France"],["SEN","Senegal"],["IRQ","Iraq"],["NOR","Norway"]] },
-  { key:"J", label:"Group J", color:"#606c38", accent:"#d4e09b",
-    teams:[["ARG","Argentina"],["ALG","Algeria"],["JOR","Jordan"],["AUT","Austria"]] },
-  { key:"K", label:"Group K", color:"#7d0000", accent:"#ffd5d5",
-    teams:[["POR","Portugal"],["COD","Congo DR"],["UZB","Uzbekistan"],["COL","Colombia"]] },
-  { key:"L", label:"Group L", color:"#1d3557", accent:"#a8dadc",
-    teams:[["ENG","England"],["CRO","Croatia"],["PAN","Panama"],["GHA","Ghana"]] },
-  { key:"FWC", label:"General", color:"#1a6b3c", accent:"#f5c800",
-    teams:[] },
+  {key:"A",label:"Group A",color:"#2d6a4f",accent:"#95d5b2",teams:[["MEX","Mexico"],["RSA","South Africa"],["KOR","Korea Republic"],["CZE","Czechia"]]},
+  {key:"B",label:"Group B",color:"#c1121f",accent:"#ffd6a5",teams:[["CAN","Canada"],["BIH","Bosnia-Herz."],["SUI","Switzerland"],["QAT","Qatar"]]},
+  {key:"C",label:"Group C",color:"#b5830a",accent:"#fff3b0",teams:[["BRA","Brazil"],["MAR","Morocco"],["SCO","Scotland"],["HAI","Haiti"]]},
+  {key:"D",label:"Group D",color:"#2a52be",accent:"#c8d8ff",teams:[["USA","USA"],["PAR","Paraguay"],["TUR","Türkiye"],["AUS","Australia"]]},
+  {key:"E",label:"Group E",color:"#c45c26",accent:"#fde8d8",teams:[["GER","Germany"],["CUW","Curaçao"],["ECU","Ecuador"],["CIV","Côte d'Ivoire"]]},
+  {key:"F",label:"Group F",color:"#7b2d8b",accent:"#e0aaff",teams:[["NED","Netherlands"],["JPN","Japan"],["SWE","Sweden"],["TUN","Tunisia"]]},
+  {key:"G",label:"Group G",color:"#023e8a",accent:"#90e0ef",teams:[["BEL","Belgium"],["EGY","Egypt"],["IRN","IR Iran"],["NZL","New Zealand"]]},
+  {key:"H",label:"Group H",color:"#8a1070",accent:"#f8c8ee",teams:[["ESP","Spain"],["CPV","Cabo Verde"],["KSA","Saudi Arabia"],["URU","Uruguay"]]},
+  {key:"I",label:"Group I",color:"#3a0ca3",accent:"#c8b6ff",teams:[["FRA","France"],["SEN","Senegal"],["IRQ","Iraq"],["NOR","Norway"]]},
+  {key:"J",label:"Group J",color:"#606c38",accent:"#d4e09b",teams:[["ARG","Argentina"],["ALG","Algeria"],["JOR","Jordan"],["AUT","Austria"]]},
+  {key:"K",label:"Group K",color:"#7d0000",accent:"#ffd5d5",teams:[["POR","Portugal"],["COD","Congo DR"],["UZB","Uzbekistan"],["COL","Colombia"]]},
+  {key:"L",label:"Group L",color:"#1d3557",accent:"#a8dadc",teams:[["ENG","England"],["CRO","Croatia"],["PAN","Panama"],["GHA","Ghana"]]},
+  {key:"GEN",label:"General",color:"#1a6b3c",accent:"#f5c800",teams:[]},
 ];
 
-// Build ALL stickers
-const ALL = [];
-const BY_GROUP = {};
-const BY_TEAM = {};
+const ALL=[], BY_GROUP={}, BY_TEAM={};
 
-// FWC general
-const fwcGroup = GROUPS.find(g=>g.key==="FWC");
-const fwcStickers = [];
+// General stickers
+const genS=[];
 ["Trophy","Mascot","Official Marks","Official Slogan","Match Ball"].forEach((name,i)=>{
-  const s = {id:`FWC${i+1}`,label:`FWC${i+1}`,name,group:"FWC",groupLabel:"General",team:"FWC",teamName:"General"};
-  ALL.push(s); fwcStickers.push(s);
+  const s={id:`FWC${i+1}`,label:`FWC${i+1}`,name,group:"GEN",groupLabel:"General",team:"GEN",teamName:"General"};
+  ALL.push(s);genS.push(s);
 });
 for(let i=11;i<=19;i++){
-  const s = {id:`FWC${i}`,label:`FWC${i}`,name:`WC History ${i-10}`,group:"FWC",groupLabel:"General",team:"FWC",teamName:"General"};
-  ALL.push(s); fwcStickers.push(s);
+  const s={id:`FWC${i}`,label:`FWC${i}`,name:`WC History ${i-10}`,group:"GEN",groupLabel:"General",team:"GEN",teamName:"General"};
+  ALL.push(s);genS.push(s);
 }
-BY_TEAM["FWC"] = fwcStickers;
-BY_GROUP["FWC"] = fwcStickers;
+BY_TEAM["GEN"]=genS; BY_GROUP["GEN"]=genS;
 
-GROUPS.filter(g=>g.key!=="FWC").forEach(g=>{
-  const gStickers = [];
+GROUPS.filter(g=>g.key!=="GEN").forEach(g=>{
+  const gS=[];
   g.teams.forEach(([code,name])=>{
-    const ts = [];
+    const ts=[];
     for(let n=1;n<=20;n++){
-      const s = {id:`${code}${n}`,label:`${code}${n}`,name:`${name} #${n}`,group:g.key,groupLabel:g.label,team:code,teamName:name,number:n};
-      ts.push(s); gStickers.push(s); ALL.push(s);
+      const s={id:`${code}${n}`,label:`${code}${n}`,name:`${name} #${n}`,group:g.key,groupLabel:g.label,team:code,teamName:name,number:n};
+      ts.push(s);gS.push(s);ALL.push(s);
     }
-    BY_TEAM[code] = ts;
+    BY_TEAM[code]=ts;
   });
-  BY_GROUP[g.key] = gStickers;
+  BY_GROUP[g.key]=gS;
 });
 
-// ── STATE ────────────────────────────────────────────────────────────────────
-let owned = new Set();
-let currentPage = "groups";
-let saveTimer = null;
+// ── STATE ─────────────────────────────────────────────────────────────────────
+let owned=new Set(), currentPage="groups", saveTimer=null;
+window._curGroup=null;
 
-// ── FIREBASE ─────────────────────────────────────────────────────────────────
+// ── FIREBASE ──────────────────────────────────────────────────────────────────
 async function load(){
   try{
     setSplash("Loading your collection…");
-    const snap = await getDoc(DOC);
-    if(snap.exists()) owned = new Set(snap.data().owned||[]);
-    hideSplash();
-    updateHeader();
-    renderGroups();
-  }catch(e){
-    try{ owned = new Set(JSON.parse(localStorage.getItem("panini26")||"[]")); }catch{}
-    setSplash("⚠️ Offline — using local data");
+    const snap=await getDoc(DOC);
+    if(snap.exists()) owned=new Set(snap.data().owned||[]);
+    hideSplash(); updateHeader(); renderGroups();
+  }catch{
+    try{owned=new Set(JSON.parse(localStorage.getItem("panini26")||"[]"));}catch{}
+    setSplash("Offline — using local data");
     setTimeout(hideSplash,1500);
-    updateHeader();
-    renderGroups();
+    updateHeader(); renderGroups();
   }
 }
 
 function scheduleSave(){
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(async()=>{
-    try{ localStorage.setItem("panini26",JSON.stringify([...owned])); }catch{}
+  saveTimer=setTimeout(async()=>{
+    try{localStorage.setItem("panini26",JSON.stringify([...owned]));}catch{}
     try{
       await setDoc(DOC,{owned:[...owned],updatedAt:new Date().toISOString()});
-      toast("✓ Saved to cloud");
-    }catch{ toast("✓ Saved locally"); }
-  },600);
+      showToast("☁️ Saved to cloud");
+    }catch{showToast("💾 Saved locally");}
+  },700);
 }
 
-// ── TOGGLE ───────────────────────────────────────────────────────────────────
-window.toggle = function(id){
+// ── TOGGLE ────────────────────────────────────────────────────────────────────
+window.toggle=function(id){
   owned.has(id)?owned.delete(id):owned.add(id);
-  updateHeader();
-  scheduleSave();
-  // Refresh current page
+  updateHeader(); scheduleSave();
   if(currentPage==="groups") renderGroups();
-  else if(currentPage==="detail") renderDetail(window._currentGroup);
-  else if(currentPage==="missing"){ renderMissing(); }
-  else if(currentPage==="have"){ renderHave(); }
+  else if(currentPage==="detail") renderDetail(window._curGroup);
+  else if(currentPage==="missing") renderMissing();
+  else if(currentPage==="have") renderHave();
 };
 
-// ── HEADER ───────────────────────────────────────────────────────────────────
+// ── HEADER ────────────────────────────────────────────────────────────────────
 function updateHeader(){
-  const total=ALL.length, have=owned.size, need=total-have, pct=Math.round(have/total*100);
+  const total=ALL.length,have=owned.size,need=total-have,pct=Math.round(have/total*100);
   document.getElementById("cnt-have").textContent=have;
   document.getElementById("cnt-need").textContent=need;
-  document.getElementById("h-sub").textContent=`${have}/${total} collected · ${pct}%`;
   document.getElementById("prog-fill").style.width=pct+"%";
+  document.getElementById("h-pct").textContent=pct+"%";
 }
 
-// ── PAGES ────────────────────────────────────────────────────────────────────
-window.switchPage = function(page){
+// ── PAGE SWITCH ───────────────────────────────────────────────────────────────
+window.switchPage=function(page){
   currentPage=page;
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));
   document.getElementById("page-"+page).classList.add("active");
   document.getElementById("nav-"+page).classList.add("active");
   if(page==="missing") renderMissing();
@@ -324,167 +394,246 @@ window.switchPage = function(page){
   else if(page==="groups") renderGroups();
 };
 
-window.showGroups = function(){
-  document.getElementById("page-detail").classList.remove("active");
-  document.getElementById("page-groups").classList.add("active");
-  currentPage="groups";
+window.showGroups=function(){
+  switchPage("groups");
 };
 
-// ── GROUPS PAGE ───────────────────────────────────────────────────────────────
+// ── GROUPS ────────────────────────────────────────────────────────────────────
 function renderGroups(){
-  const grid = document.getElementById("group-grid");
-  grid.innerHTML = GROUPS.map(g=>{
-    const stickers = BY_GROUP[g.key]||[];
-    const have = stickers.filter(s=>owned.has(s.id)).length;
-    const total = stickers.length;
-    const pct = total?Math.round(have/total*100):0;
-    return `<div class="group-card" style="background:${g.color}22;border-color:${g.color}55" onclick="showDetail('${g.key}')">
-      <div class="gc-key" style="color:${g.accent}">${g.key}</div>
-      <div class="gc-label" style="color:rgba(255,255,255,0.6)">${g.label}</div>
-      <div class="gc-prog" style="color:${g.accent}">${have}/${total}</div>
+  const grid=document.getElementById("group-grid");
+  grid.innerHTML=GROUPS.map(g=>{
+    const st=BY_GROUP[g.key]||[];
+    const have=st.filter(s=>owned.has(s.id)).length;
+    const total=st.length;
+    const pct=total?Math.round(have/total*100):0;
+    const done=have===total&&total>0;
+    return `<div class="gc" style="background:${g.color}18;border-color:${g.color}44" onclick="showDetail('${g.key}')">
+      ${done?`<div class="gc-done">🏆</div>`:""}
+      <div class="gc-top">
+        <div class="gc-key" style="color:${g.accent}">${g.key}</div>
+        <div class="gc-badge" style="color:${g.accent}">${pct}%</div>
+      </div>
+      <div class="gc-name" style="color:rgba(255,255,255,0.65)">${g.label}</div>
+      <div class="gc-teams" style="color:rgba(255,255,255,0.4)">${g.teams.map(t=>t[0]).join(" · ")||"General Stickers"}</div>
+      <div class="gc-foot">
+        <div class="gc-count" style="color:${g.accent}">${have}/${total}</div>
+        <div class="gc-pct" style="color:rgba(255,255,255,0.4)">${total-have} left</div>
+      </div>
       <div class="gc-bar"><div class="gc-bar-fill" style="width:${pct}%;background:${g.accent}"></div></div>
     </div>`;
   }).join("");
 }
 
-// ── GROUP DETAIL ──────────────────────────────────────────────────────────────
-window._currentGroup = null;
-window.showDetail = function(groupKey){
-  window._currentGroup = groupKey;
+// ── DETAIL ────────────────────────────────────────────────────────────────────
+window.showDetail=function(key){
+  window._curGroup=key;
   currentPage="detail";
   document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));
   document.getElementById("page-detail").classList.add("active");
   document.getElementById("nav-groups").classList.add("active");
-  renderDetail(groupKey);
+  renderDetail(key);
 };
 
-function renderDetail(groupKey){
-  const g = GROUPS.find(x=>x.key===groupKey);
-  const content = document.getElementById("detail-content");
+function renderDetail(key){
+  const g=GROUPS.find(x=>x.key===key);
+  const st=BY_GROUP[key]||[];
+  const have=st.filter(s=>owned.has(s.id)).length;
+  const pct=st.length?Math.round(have/st.length*100):0;
 
-  // Header
-  let html = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-    <span class="pill" style="background:${g.color};color:${g.accent};font-size:14px;padding:4px 12px">${g.key}</span>
-    <span style="font-size:16px;font-weight:800">${g.label}</span>
+  let html=`<div class="detail-hdr" style="background:${g.color}22;border:1.5px solid ${g.color}44">
+    <div class="dh-left">
+      <div class="dh-key" style="color:${g.accent}">${g.key}</div>
+      <div class="dh-name">${g.label}</div>
+    </div>
+    <div class="dh-right">
+      <div class="dh-stat" style="color:${g.accent}">${pct}%</div>
+      <div class="dh-stat-l">${have} of ${st.length}</div>
+    </div>
   </div>`;
 
-  // For FWC show flat list
-  if(groupKey==="FWC"){
-    const stickers = BY_GROUP["FWC"]||[];
-    html += `<div class="sec-hdr">General Stickers</div><div class="sticker-grid">`;
-    html += stickers.map(s=>stickerCard(s)).join("");
-    html += `</div>`;
+  if(key==="GEN"){
+    html+=`<div class="sticker-grid">${(BY_TEAM["GEN"]||[]).map(s=>stickerCard(s,g)).join("")}</div>`;
   } else {
-    // Each team
     g.teams.forEach(([code,name])=>{
-      const ts = BY_TEAM[code]||[];
-      const have = ts.filter(s=>owned.has(s.id)).length;
-      html += `<div class="team-section">
-        <div class="team-header" style="background:${g.color}22">
+      const ts=BY_TEAM[code]||[];
+      const th=ts.filter(s=>owned.has(s.id)).length;
+      html+=`<div class="team-block">
+        <div class="team-hdr" style="background:${g.color}18">
           <div class="th-left">
-            <span style="font-size:15px;font-weight:800;color:${g.accent}">${code}</span>
+            <span class="th-code" style="color:${g.accent}">${code}</span>
             <span class="th-name">${name}</span>
           </div>
-          <span class="th-pct" style="color:${g.accent}">${have}/${ts.length}</span>
+          <div class="th-right">
+            <span class="th-count">${th}/${ts.length}</span>
+          </div>
         </div>
-        <div class="sticker-grid">${ts.map(s=>stickerCard(s)).join("")}</div>
+        <div class="sticker-grid">${ts.map(s=>stickerCard(s,g)).join("")}</div>
       </div>`;
     });
   }
-
-  content.innerHTML = html;
+  document.getElementById("detail-content").innerHTML=html;
 }
 
-function stickerCard(s){
-  const isOwned = owned.has(s.id);
-  const cls = isOwned?"owned":"missing";
-  const num = s.number!=null?`#${s.number}`:s.label.replace(/^[A-Z]+/,"");
-  return `<button class="sc ${cls}" onclick="toggle('${s.id}')">
-    <div class="sc-check">✓</div>
-    <div class="sc-id">${s.label}</div>
+function stickerCard(s,g){
+  const isO=owned.has(s.id);
+  const num=s.number!=null?s.number:s.label.replace(/^[A-Z]+/,"");
+  return `<button class="sc ${isO?"have":"miss"}" onclick="toggle('${s.id}')">
+    <div class="sc-ck">✓</div>
     <div class="sc-num">${num}</div>
+    <div class="sc-lbl">${s.label}</div>
   </button>`;
 }
 
-// ── MISSING PAGE ──────────────────────────────────────────────────────────────
-window.renderMissing = function(){
-  const q = document.getElementById("search-missing").value.toLowerCase().trim();
-  document.getElementById("sc-missing").style.display = q?"block":"none";
-  const items = ALL.filter(s=>!owned.has(s.id) && (!q||s.label.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)||s.teamName?.toLowerCase().includes(q)));
-  const el = document.getElementById("missing-list");
+// ── MISSING LIST ──────────────────────────────────────────────────────────────
+window.renderMissing=function(){
+  const q=document.getElementById("search-m").value.toLowerCase().trim();
+  document.getElementById("clr-m").style.display=q?"block":"none";
+  const items=ALL.filter(s=>!owned.has(s.id)&&(!q||s.label.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)||s.teamName?.toLowerCase().includes(q)));
+  const el=document.getElementById("list-missing");
+  document.getElementById("sum-m").textContent=`${items.length} sticker${items.length!==1?"s":""} missing${q?` matching "${document.getElementById("search-m").value}"`:""}`;
   if(!items.length){
-    el.innerHTML=`<div class="empty-state">🏆 You have everything${q?" matching that search":""}!</div>`;
+    el.innerHTML=`<div class="empty"><div class="empty-icon">🏆</div><div class="empty-title">All done!</div><div class="empty-sub">You have every sticker${q?" matching that search":""}!</div></div>`;
     return;
   }
-  // Group by group
-  const byGroup = {};
-  items.forEach(s=>{ (byGroup[s.group]=byGroup[s.group]||[]).push(s); });
-  let html = `<div style="font-size:11px;color:#444;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">${items.length} sticker${items.length!==1?"s":""} missing</div>`;
+  const byG={};
+  items.forEach(s=>{(byG[s.group]=byG[s.group]||[]).push(s);});
+  let html="";
   GROUPS.forEach(g=>{
-    const gs = byGroup[g.key];
+    const gs=byG[g.key];
     if(!gs) return;
-    html+=`<div class="sec-hdr" style="color:${g.accent||'#aaa'}">${g.label} — ${gs.length} missing</div>`;
-    html+=gs.map(s=>stickerRow(s,g)).join("");
+    html+=`<div class="group-section">
+      <div class="gs-hdr">
+        <span class="gs-pill" style="background:${g.color};color:${g.accent}">${g.key}</span>
+        <span class="gs-name">${g.label}</span>
+        <span class="gs-cnt">${gs.length} missing</span>
+      </div>
+      ${gs.map(s=>stickerRow(s,g,false)).join("")}
+    </div>`;
   });
   el.innerHTML=html;
 };
 
-// ── HAVE PAGE ─────────────────────────────────────────────────────────────────
-window.renderHave = function(){
-  const q = document.getElementById("search-have").value.toLowerCase().trim();
-  document.getElementById("sc-have").style.display = q?"block":"none";
-  const items = ALL.filter(s=>owned.has(s.id) && (!q||s.label.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)||s.teamName?.toLowerCase().includes(q)));
-  const el = document.getElementById("have-list");
+// ── HAVE LIST ─────────────────────────────────────────────────────────────────
+window.renderHave=function(){
+  const q=document.getElementById("search-h").value.toLowerCase().trim();
+  document.getElementById("clr-h").style.display=q?"block":"none";
+  const items=ALL.filter(s=>owned.has(s.id)&&(!q||s.label.toLowerCase().includes(q)||s.name.toLowerCase().includes(q)||s.teamName?.toLowerCase().includes(q)));
+  const el=document.getElementById("list-have");
+  document.getElementById("sum-h").textContent=`${items.length} sticker${items.length!==1?"s":""} collected${q?` matching "${document.getElementById("search-h").value}"`:""}`;
   if(!items.length){
-    el.innerHTML=`<div class="empty-state">Nothing collected yet!<br><br>Go to Groups and tap stickers.</div>`;
+    el.innerHTML=`<div class="empty"><div class="empty-icon">📦</div><div class="empty-title">Nothing yet</div><div class="empty-sub">Go to Groups and tap stickers to mark them as collected.</div></div>`;
     return;
   }
-  const byGroup = {};
-  items.forEach(s=>{ (byGroup[s.group]=byGroup[s.group]||[]).push(s); });
-  let html = `<div style="font-size:11px;color:#444;font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">${items.length} sticker${items.length!==1?"s":""} collected</div>`;
+  const byG={};
+  items.forEach(s=>{(byG[s.group]=byG[s.group]||[]).push(s);});
+  let html="";
   GROUPS.forEach(g=>{
-    const gs = byGroup[g.key];
+    const gs=byG[g.key];
     if(!gs) return;
-    html+=`<div class="sec-hdr" style="color:${g.accent||'#aaa'}">${g.label} — ${gs.length} collected</div>`;
-    html+=gs.map(s=>stickerRow(s,g,true)).join("");
+    html+=`<div class="group-section">
+      <div class="gs-hdr">
+        <span class="gs-pill" style="background:${g.color};color:${g.accent}">${g.key}</span>
+        <span class="gs-name">${g.label}</span>
+        <span class="gs-cnt">${gs.length} collected</span>
+      </div>
+      ${gs.map(s=>stickerRow(s,g,true)).join("")}
+    </div>`;
   });
   el.innerHTML=html;
 };
 
-function stickerRow(s, g, isOwned=false){
-  const cls = isOwned?"owned":"missing";
-  const icon = isOwned?"✓":"+";
-  return `<button class="sticker-row ${cls}" onclick="toggle('${s.id}')">
-    <div class="sr-badge">${s.label}</div>
-    <div class="sr-info">
+function stickerRow(s,g,isOwned){
+  return `<button class="sticker-row${isOwned?" have":""}" onclick="toggle('${s.id}')">
+    <div class="sr-id">${s.label}</div>
+    <div class="sr-body">
       <div class="sr-name">${s.name}</div>
-      <div class="sr-sub">${s.groupLabel}</div>
+      <div class="sr-grp">${s.groupLabel}</div>
     </div>
-    <div class="sr-action">${icon}</div>
+    <div class="sr-btn">${isOwned?"✓":"+"}</div>
   </button>`;
 }
 
 // ── SEARCH ────────────────────────────────────────────────────────────────────
-window.clearSearch = function(which){
+window.clearSrch=function(which){
   document.getElementById("search-"+which).value="";
-  document.getElementById("sc-"+which).style.display="none";
-  if(which==="missing") renderMissing();
-  else renderHave();
+  document.getElementById("clr-"+which).style.display="none";
+  if(which==="m") renderMissing(); else renderHave();
 };
 
-// ── UI HELPERS ────────────────────────────────────────────────────────────────
+// ── EXPORT ────────────────────────────────────────────────────────────────────
+window.openExport=function(){
+  const missing=ALL.filter(s=>!owned.has(s.id));
+  const date=new Date().toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+  const byG={};
+  missing.forEach(s=>{(byG[s.group]=byG[s.group]||[]).push(s);});
+
+  const lines=[
+    "PANINI FIFA WORLD CUP 2026",
+    "Missing Stickers List — "+date,
+    "Missing: "+missing.length+" / "+ALL.length+"   |   Have: "+owned.size,
+    "=".repeat(40),
+    ""
+  ];
+
+  GROUPS.forEach(g=>{
+    const gs=byG[g.key];
+    if(!gs) return;
+
+    lines.push("[ "+g.label.toUpperCase()+" ] — "+gs.length+" missing");
+    lines.push("-".repeat(36));
+
+    const byT={};
+    gs.forEach(s=>{(byT[s.teamName]=byT[s.teamName]||[]).push(s);});
+
+    Object.entries(byT).forEach(([team,stks])=>{
+      const nums=stks.map(s=>s.number!=null?"#"+s.number:s.label).join(", ");
+      lines.push("  "+team+" ("+stks.length+" missing):");
+      lines.push("    "+nums);
+    });
+    lines.push("");
+  });
+
+  lines.push("=".repeat(40));
+  lines.push("Panini WC2026 Tracker");
+
+  window._exportText=lines.join("\n");
+  document.getElementById("modal-text").textContent=window._exportText;
+  document.getElementById("modal-sub").textContent=missing.length+" stickers across "+Object.keys(byG).length+" groups";
+  document.getElementById("modal-overlay").classList.add("open");
+};
+
+window.closeExport=function(){
+  document.getElementById("modal-overlay").classList.remove("open");
+};
+
+window.copyList=function(){
+  navigator.clipboard.writeText(window._exportText||"").then(()=>{
+    showToast("✅ Copied to clipboard!");
+    closeExport();
+  }).catch(()=>{
+    showToast("⚠️ Select text manually to copy");
+  });
+};
+
+document.getElementById("modal-overlay").addEventListener("click",function(e){
+  if(e.target===this) closeExport();
+});
+
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+function showToast(msg){
+  const el=document.getElementById("toast");
+  el.textContent=msg; el.classList.add("show");
+  setTimeout(()=>el.classList.remove("show"),2500);
+}
+
+// ── SPLASH ────────────────────────────────────────────────────────────────────
 function hideSplash(){
   const s=document.getElementById("splash");
-  s.style.transition="opacity .4s";s.style.opacity="0";
-  setTimeout(()=>s.remove(),400);
+  s.style.opacity="0";
+  setTimeout(()=>s.remove(),500);
 }
-function setSplash(msg){ document.getElementById("splash-msg").textContent=msg; }
-function toast(msg){
-  const el=document.getElementById("toast");
-  el.textContent=msg;el.classList.add("show");
-  setTimeout(()=>el.classList.remove("show"),2000);
-}
+function setSplash(msg){document.getElementById("splash-msg").textContent=msg;}
 
 load();
 </script>
